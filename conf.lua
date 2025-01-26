@@ -1,0 +1,2 @@
+function conf(t)
+end
