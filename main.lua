@@ -14,6 +14,7 @@ function love.load()
   Task.reward = 0 -- reward = (loadnum *)
   Task.penalty = 0
   Task.time = 0
+  Task.penaltytime = 0
 
   --Base Timer
   TimeDay = {}
@@ -21,6 +22,11 @@ function love.load()
   TimeDay.hour = 0
   TimeDay.day = 0
   DeltaTime = 0
+  TimeAllocated = {}
+  TimeToComplete = {}
+  
+  --Penalty Timer
+  TimeTillPenalty = 0
   
   --Game State
   Lost = false
@@ -209,7 +215,11 @@ function love.draw()
   
   --Displaying tasks and completed
   if TaskAcc == true and tasks.ArrivalTimer(DeltaTime) > 0 then
+    TimeToComplete = tasks.ConvertTime(Task.penaltytime)
+    TimeAllocated = tasks.ConvertTime(Task.time)
     love.graphics.print("Time till completion: " .. tostring(tasks.ArrivalTimer(DeltaTime)), 0, 160)
+    love.graphics.print("Time allocated- Days: " .. TimeAllocated.day .. " Hours: " .. TimeAllocated.hour .. " Minutes: " .. TimeAllocated.minute, 0, 180)
+    love.graphics.print("Time till task is failed: Days: " .. TimeToComplete.day .. " Hours: " .. TimeToComplete.hour .. " Minute: " .. TimeToComplete.minute, 250, 0)
   elseif TaskAcc == true and tasks.ArrivalTimer(DeltaTime) <= 0 then
     TaskAcc = false
     TaskCom = true

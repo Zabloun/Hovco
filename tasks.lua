@@ -9,10 +9,12 @@ task.difficulty = 0
 task.reward = 0 -- reward = (loadnum *)
 task.penalty = 0
 task.time = 0
+task.penaltytime = 0
 
 --Additonal global variables
 baserate = 75
 tasktime = 0
+taskpenaltytime = 0
 
 function tasks.newDailyTask()
   
@@ -59,6 +61,9 @@ function tasks.newDailyTask()
   task.time = task.distance / 4
   tasktime = task.time
   
+  --Penalty time
+  task.penaltytime = task.time * 3
+  
   return task
   
 end
@@ -66,11 +71,51 @@ end
 --Function to update time
 function tasks.ArrivalTimer(deltatime)
   
-  
   while tasktime > -1 do
     tasktime = tasktime - deltatime
     return tasktime
   end
   
 end
+
+--Function to update penalty timer
+function tasks.PenaltyTimer(deltatime)
   
+    while taskpenaltytime > -1 do
+    taskpenaltytime = taskpenaltytime - deltatime
+    return task.penaltytime
+    
+  end
+end
+
+--Converting Times to game time
+function tasks.ConvertTime(InputTime)
+  
+  --Local variables for game time
+  GameTime = {}
+  GameTime.minute = 0
+  GameTime.hour = 0 
+  GameTime.day = 0
+  
+  --Converting time
+  while InputTime > 60 do
+    if (tasktime % 60) ~= 0 then
+      GameTime.hour = math.floor(InputTime / 60)
+      InputTime = InputTime - GameTime.hour * 60
+      if (GameTime.hour > 16) then
+        if (GameTime.hour % 16) ~= 0 then
+          Time.day = math.floor(Time.hour / 16)
+          Time.hour = Time.hour - Time.day * 16
+        end
+      end
+    end
+  end
+  
+  if InputTime < 60 then
+    GameTime.minute = InputTime
+  end
+ 
+  
+  return GameTime
+  
+end
