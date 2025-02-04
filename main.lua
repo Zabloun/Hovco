@@ -98,6 +98,9 @@ function love.load()
   buttonpressed = ""
   newtask = 0
   
+  --Cursor--
+  cursor = 0
+  
 end
 
 function love.update(dt)
@@ -164,6 +167,15 @@ function love.update(dt)
   end
   --
   
+  --Custom Mouse Corsors
+  love.mouse.setVisible(false)
+  love.mouse.setGrabbed(true)
+  if ui.hoverDetection(love.mouse.getX(), love.mouse.getY(), buttons) == true then
+    cursor = love.graphics.newImage("Sprites/WIP/ui_zeb_hand_cursor1.png")
+  else
+    cursor = love.graphics.newImage("Sprites/WIP/ui_zeb_hand_cursor0.png")
+  end
+  --
   --Rewarding player after completion of task
   if TaskCom == true then
     coins = coins + Task.reward
@@ -226,4 +238,8 @@ function love.draw()
   else
     TaskAcc = false
   end
+  
+  --Custom Mouse Cursor
+  love.graphics.draw(cursor, love.mouse.getX() - cursor:getWidth() / 2, love.mouse.getY() - cursor:getHeight() / 2)
+  --
 end
